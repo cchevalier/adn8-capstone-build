@@ -1,0 +1,68 @@
+package net.cchevalier.photosplash.adapters;
+
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import net.cchevalier.photosplash.R;
+import net.cchevalier.photosplash.models.Photo;
+import net.cchevalier.photosplash.ui.custom.DynamicHeightImageView;
+
+import java.util.ArrayList;
+
+/**
+ * Created by cch on 11/05/2016.
+ */
+public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> {
+
+        private ArrayList<Photo> mPhotos;
+
+        // ViewHolder
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            DynamicHeightImageView photoView;
+            TextView authorView;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+                photoView = (DynamicHeightImageView)itemView.findViewById(R.id.list_item_photo);
+                authorView = (TextView) itemView.findViewById(R.id.list_item_author);
+            }
+        }
+
+        // Constructor
+        public PhotoAdapter(ArrayList<Photo> photos) {
+            this.mPhotos = photos;
+        }
+
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_photo, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+
+            Photo currentPhoto = mPhotos.get(position);
+
+            String username = "[" + (position+1) + "] " + currentPhoto.user.name;
+            holder.authorView.setText(username);
+
+            holder.photoView.setHeightRatio((double)currentPhoto.height/currentPhoto.width);
+            Picasso.with(holder.photoView.getContext())
+                    .load(currentPhoto.urls.regular)
+                    .error(android.R.drawable.ic_menu_help)
+                    .into(holder.photoView);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mPhotos.size();
+        }
+}
