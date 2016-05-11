@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Retrieving photos...", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                getPhotos();
             }
         });
 
@@ -123,25 +122,41 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        String selected = "PhotoSplash";
+        int choice;
+
         if (id == R.id.nav_category_new) {
-            // Handle the camera action
+            selected = "New";
+            choice = 0;
         } else if (id == R.id.nav_category_featured) {
-
+            selected = "Featured";
+            choice = 1;
         } else if (id == R.id.nav_category_favorites) {
-
+            selected = "Favorites";
+            choice = -1;
         } else if (id == R.id.nav_category_buildings) {
-
+            selected = "Buildings";
+            choice = 2;
         } else if (id == R.id.nav_category_food) {
-
+            selected = "Food";
+            choice = 3;
         } else if (id == R.id.nav_category_nature) {
-
+            selected = "Nature";
+            choice = 4;
         } else if (id == R.id.nav_category_objects) {
-
+            selected = "Objects";
+            choice = 8;
         } else if (id == R.id.nav_category_people) {
-
+            selected = "People";
+            choice = 6;
         } else if (id == R.id.nav_category_technology) {
-
+            selected = "Technology";
+            choice = 7;
+        } else {
+            choice = 99;
         }
+        getSupportActionBar().setTitle(selected);
+        getPhotos(choice);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -151,7 +166,7 @@ public class MainActivity extends AppCompatActivity
 
     //
     //
-    public void getPhotos() {
+    public void getPhotos(int choice) {
 
         int page = 1;
         int perPage = 20;
@@ -165,8 +180,25 @@ public class MainActivity extends AppCompatActivity
 
         Call<List<Photo>> call;
 
-        // case NEW
-        call = unsplashService.getNewPhotos(page, perPage);
+        switch (choice) {
+            case 0: // "New"
+                call = unsplashService.getNewPhotos(page, perPage);
+                break;
+            case 1:
+                call = unsplashService.getFeaturedPhotos(page, perPage);
+                break;
+            case 2:
+            case 3:
+            case 4:
+            case 6:
+            case 7:
+            case 8:
+                call = unsplashService.getPhotosFromCategory(choice, page, perPage);
+                break;
+            default:
+                call = unsplashService.getSearchPhotos("yellow", 1, 18);
+                break;
+        }
 
         call.enqueue(new Callback<List<Photo>>() {
             @Override
