@@ -1,6 +1,8 @@
 package net.cchevalier.photosplash.adapters;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import net.cchevalier.photosplash.R;
+import net.cchevalier.photosplash.ViewActivity;
 import net.cchevalier.photosplash.models.Photo;
 import net.cchevalier.photosplash.ui.custom.DynamicHeightImageView;
 
@@ -19,17 +22,37 @@ import java.util.ArrayList;
  */
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> {
 
+    public final String TAG = "PhotoSplash";
+
         private ArrayList<Photo> mPhotos;
 
         // ViewHolder
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             DynamicHeightImageView photoView;
             TextView authorView;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 photoView = (DynamicHeightImageView)itemView.findViewById(R.id.list_item_photo);
+                photoView.setOnClickListener(this);
                 authorView = (TextView) itemView.findViewById(R.id.list_item_author);
+            }
+
+            /**
+             * Called when a view has been clicked.
+             *
+             * @param v The view that was clicked.
+             */
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick on " + getPosition() + ": " + mPhotos.get(getPosition()).urls.regular);
+
+                String selectedUrl = mPhotos.get(getPosition()).urls.regular;
+
+                Intent intent = new Intent(v.getContext(), ViewActivity.class);
+                intent.putExtra("url.full", selectedUrl);
+
+                v.getContext().startActivity(intent);
             }
         }
 
@@ -56,7 +79,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
 
             holder.photoView.setHeightRatio((double)currentPhoto.height/currentPhoto.width);
             Picasso.with(holder.photoView.getContext())
-                    .load(currentPhoto.urls.regular)
+                    .load(currentPhoto.urls.small)
                     .error(android.R.drawable.ic_menu_help)
                     .into(holder.photoView);
         }

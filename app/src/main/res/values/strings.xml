@@ -18,6 +18,7 @@
     <string name="category_objects">Objects</string>
     <string name="category_people">People</string>
     <string name="category_technology">Technology</string>
+    <string name="title_activity_view">ViewActivity</string>
 
 
 </resources>
