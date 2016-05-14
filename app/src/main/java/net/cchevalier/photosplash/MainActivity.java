@@ -73,7 +73,9 @@ public class MainActivity extends AppCompatActivity
         // RecyclerView stuff
         mPhotos = new ArrayList<>();
         mPhotoAdapter = new PhotoAdapter(mPhotos);
-        mLayoutManager = new StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL);
+
+        int nCols = getResources().getInteger(R.integer.photos_columns);
+        mLayoutManager = new StaggeredGridLayoutManager(nCols, GridLayoutManager.VERTICAL);
         mRecyclerView = (RecyclerView) findViewById(R.id.photos_recycler_view);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mPhotoAdapter);
