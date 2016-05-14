@@ -25,7 +25,8 @@ public class ViewActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
-//        actionBar.setDisplayHomeAsUpEnabled(t);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -36,8 +37,8 @@ public class ViewActivity extends AppCompatActivity {
             }
         });
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // PhotoView handling
         PhotoView photoView  = (PhotoView) findViewById(R.id.iv_photo);
 
         final PhotoViewAttacher attacher = new PhotoViewAttacher(photoView);
@@ -55,7 +56,6 @@ public class ViewActivity extends AppCompatActivity {
                     public void onError() {
                     }
                 });
-
     }
 
 }
