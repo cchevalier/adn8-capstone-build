@@ -47,10 +47,13 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
             public void onClick(View v) {
                 Log.d(TAG, "onClick on " + getPosition() + ": " + mPhotos.get(getPosition()).urls.regular);
 
-                String selectedUrl = mPhotos.get(getPosition()).urls.regular;
-
                 Intent intent = new Intent(v.getContext(), ViewActivity.class);
+
+                String selectedUrl = mPhotos.get(getPosition()).urls.regular;
                 intent.putExtra("url.full", selectedUrl);
+
+                Photo current = mPhotos.get(getPosition());
+                intent.putExtra("currentPhoto", current);
 
                 v.getContext().startActivity(intent);
             }
