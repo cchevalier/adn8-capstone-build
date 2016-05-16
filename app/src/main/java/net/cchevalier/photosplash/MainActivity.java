@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_refresh);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity
         mPhotos = new ArrayList<>();
         mPhotoAdapter = new PhotoAdapter(mPhotos);
 
+        // Adaptive Grid based on screen width
+        // see https://www.udacity.com/course/viewer#!/c-ud862-nd/l-4964230471/m-4904228664
         int nCols = getResources().getInteger(R.integer.photos_columns);
         mLayoutManager = new StaggeredGridLayoutManager(nCols, GridLayoutManager.VERTICAL);
         mRecyclerView = (RecyclerView) findViewById(R.id.photos_recycler_view);
