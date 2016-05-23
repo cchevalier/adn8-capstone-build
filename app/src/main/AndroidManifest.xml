@@ -30,6 +30,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.cchevalier.photosplash.MainActivity" />
         </activity>
+        <provider
+            android:authorities="net.cchevalier.photosplash"
+            android:name=".data.PhotosplashProvider"
+            android:exported="false">
+        </provider>
     </application>
 
 </manifest>
