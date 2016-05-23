@@ -1,13 +1,7 @@
 package net.cchevalier.photosplash;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
-import android.view.View;
+import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,32 +10,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import net.cchevalier.photosplash.adapters.PhotoAdapter;
-import net.cchevalier.photosplash.models.Photo;
-import net.cchevalier.photosplash.network.UnsplashService;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import net.cchevalier.photosplash.fragments.FavoritesPhotosFragment;
+import net.cchevalier.photosplash.fragments.PhotosByCategoryFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public final String TAG = "PhotoSplash";
 
+/*
     private ArrayList<Photo> mPhotos;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private PhotoAdapter mPhotoAdapter;
+*/
 
 
     @Override
@@ -72,6 +57,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+/*
         // RecyclerView stuff
         mPhotos = new ArrayList<>();
         mPhotoAdapter = new PhotoAdapter(mPhotos);
@@ -83,6 +69,7 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView = (RecyclerView) findViewById(R.id.photos_recycler_view);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mPhotoAdapter);
+*/
 
         // Track Picasso perfs
         Picasso
@@ -131,15 +118,15 @@ public class MainActivity extends AppCompatActivity
         String selected = "PhotoSplash";
         int choice;
 
-        if (id == R.id.nav_category_new) {
+        if (id == R.id.nav_category_favorites) {
+            selected = "Favorites";
+            choice = -1;
+        } else if (id == R.id.nav_category_new) {
             selected = "New";
             choice = 0;
         } else if (id == R.id.nav_category_featured) {
             selected = "Featured";
             choice = 1;
-        } else if (id == R.id.nav_category_favorites) {
-            selected = "Favorites";
-            choice = -1;
         } else if (id == R.id.nav_category_buildings) {
             selected = "Buildings";
             choice = 2;
@@ -161,8 +148,23 @@ public class MainActivity extends AppCompatActivity
         } else {
             choice = 99;
         }
+
         getSupportActionBar().setTitle(selected);
+
+        // Begin the transaction
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        if (choice >= 0) {
+            // Replace the contents of the container with the new fragment
+            ft.replace(R.id.fragment_container, PhotosByCategoryFragment.newInstance(selected, choice));
+        } else {
+            ft.replace(R.id.fragment_container, FavoritesPhotosFragment.newInstance(selected, "World"));
+        }
+        // Complete the changes added above
+        ft.commit();
+/*
         getPhotos(choice);
+*/
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -170,6 +172,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+/*
     //
     //
     public void getPhotos(int choice) {
@@ -245,7 +248,7 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-
-
     }
+
+*/
 }
