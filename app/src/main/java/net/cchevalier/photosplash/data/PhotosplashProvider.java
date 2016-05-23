@@ -25,6 +25,7 @@ public class PhotosplashProvider extends ContentProvider {
     public static final int FAVORITES = 100;
     public static final int FAVORITE_WITH_ID = 110;
 
+    //
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     // UriMatcher builder
     static UriMatcher buildUriMatcher() {
@@ -214,6 +215,7 @@ public class PhotosplashProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
+        Log.d(TAG, "delete: " + rowsDeleted);
         if (rowsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }

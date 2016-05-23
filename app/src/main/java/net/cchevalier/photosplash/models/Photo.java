@@ -16,9 +16,13 @@ public class Photo implements Parcelable {
     public final String color;
     public final int likes;
     public final boolean liked_by_user;
+
     public final User user;
+
     public final List<Category> categories;
+
     public final Urls urls;
+
 
     public Photo(String id, int width, int height, String color, int likes, boolean liked_by_user,
                  User user, Urls urls, List<Category> categories ) {
