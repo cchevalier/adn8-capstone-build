@@ -2,7 +2,10 @@ package net.cchevalier.photosplash.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -10,39 +13,38 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import net.cchevalier.photosplash.PhotosLoader;
 import net.cchevalier.photosplash.R;
 import net.cchevalier.photosplash.adapters.PhotoAdapter;
 import net.cchevalier.photosplash.models.Photo;
-import net.cchevalier.photosplash.network.UnsplashService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link PhotosByCategoryFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * PhotosByCategoryFragment
  */
-public class PhotosByCategoryFragment extends Fragment {
+public class PhotosByCategoryFragment extends Fragment
+        implements LoaderManager.LoaderCallbacks<List<Photo>> {
 
-    public final String TAG = "PhotoSplash";
+    public static final String TAG = "PhotoSplash-PFrag";
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "Category_Title";
-    private static final String ARG_PARAM2 = "Category_Id";
+    private static final int PHOTO_LOADER_ID = 33;
+
+    // Fragment initialization parameters
+    private static final String CATEGORY_TITLE = "Category_Title";
+    private static final String CATEGORY_ID = "Category_Id";
 
     private String mCategoryTitle;
     private int mCategoryId;
 
+    private static final String PHOTOS_LOADED = "Photos_Loaded";
     private ArrayList<Photo> mPhotos;
+
+//    private static final String NEW_LOAD_REQUIRED = "New_Load_Required";
+//    private boolean newLoadRequired;
+
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private PhotoAdapter mPhotoAdapter;
@@ -51,36 +53,58 @@ public class PhotosByCategoryFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     */
-    public static PhotosByCategoryFragment newInstance(String param1, int param2) {
+    // Factory method provided parameters.
+    public static PhotosByCategoryFragment newInstance(String categoryTitle, int categoryId) {
+        Log.d(TAG, "newInstance: ");
+
         PhotosByCategoryFragment fragment = new PhotosByCategoryFragment();
+
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putInt(ARG_PARAM2, param2);
+        args.putString(CATEGORY_TITLE, categoryTitle);
+        args.putInt(CATEGORY_ID, categoryId);
         fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: ");
+
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
-            mCategoryTitle = getArguments().getString(ARG_PARAM1);
-            mCategoryId = getArguments().getInt(ARG_PARAM2);
+            mCategoryTitle = getArguments().getString(CATEGORY_TITLE);
+            mCategoryId = getArguments().getInt(CATEGORY_ID);
         }
+
+        if (savedInstanceState != null) {
+            String savedCategoryTitle = savedInstanceState.getString(CATEGORY_TITLE, "Fav");
+            int savedCategoryId = savedInstanceState.getInt(CATEGORY_ID, -1);
+            Log.d(TAG, "onCreate: saved: " + savedCategoryId + " " + savedCategoryTitle);
+//            mPhotos = savedInstanceState.getParcelableArrayList(PHOTOS_LOADED);
+        }
+
+        mPhotos = new ArrayList<>();
+//        newLoadRequired = true;
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: ");
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_photos_by_category, container, false);
 
+        if (savedInstanceState != null) {
+//            newLoadRequired = savedInstanceState.getBoolean(NEW_LOAD_REQUIRED, true);
+            mPhotos = savedInstanceState.getParcelableArrayList(PHOTOS_LOADED);
+        }
+
         // RecyclerView stuff
-        mPhotos = new ArrayList<>();
+//        mPhotos = new ArrayList<>();
         mPhotoAdapter = new PhotoAdapter(mPhotos);
 
         // Adaptive Grid based on screen width
@@ -92,95 +116,180 @@ public class PhotosByCategoryFragment extends Fragment {
         mRecyclerView.setAdapter(mPhotoAdapter);
 
         if (getArguments() != null) {
-            mCategoryTitle = getArguments().getString(ARG_PARAM1);
-            mCategoryId = getArguments().getInt(ARG_PARAM2);
+            mCategoryTitle = getArguments().getString(CATEGORY_TITLE);
+            mCategoryId = getArguments().getInt(CATEGORY_ID);
         } else {
+            mCategoryTitle = "Undefined";
             mCategoryId = 99;
         }
-        getPhotos(mCategoryId);
+
 
         return rootView;
     }
 
+    /**
+     * Called when the fragment's activity has been created and this
+     * fragment's view hierarchy instantiated.  It can be used to do final
+     * initialization once these pieces are in place, such as retrieving
+     * views or restoring state.  It is also useful for fragments that use
+     * {@link #setRetainInstance(boolean)} to retain their instance,
+     * as this callback tells the fragment when it is fully associated with
+     * the new activity instance.  This is called after {@link #onCreateView}
+     * and before {@link #onViewStateRestored(Bundle)}.
+     *
+     * @param savedInstanceState If the fragment is being re-created from
+     *                           a previous saved state, this is the state.
+     */
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onActivityCreated: ");
 
-    //
-    //
-    public void getPhotos(int choice) {
+        super.onActivityCreated(savedInstanceState);
 
-        int page = 1;
-        int perPage = 20;
+        // initialize a Loader within the activity's onCreate() method, or within the fragment's onActivityCreated() method.
+        getLoaderManager().initLoader(PHOTO_LOADER_ID, null, this).forceLoad();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UnsplashService.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        UnsplashService unsplashService = retrofit.create(UnsplashService.class);
-
-        Call<List<Photo>> call;
-
-        switch (choice) {
-            case 0: // "New"
-                call = unsplashService.getNewPhotos(page, perPage);
-                break;
-            case 1:
-                call = unsplashService.getFeaturedPhotos(page, perPage);
-                break;
-            case 2:
-            case 3:
-            case 4:
-            case 6:
-            case 7:
-            case 8:
-                call = unsplashService.getPhotosFromCategory(choice, page, perPage);
-                break;
-            default:
-                call = unsplashService.getSearchPhotos("yellow", 1, 18);
-                break;
+        if (savedInstanceState != null) {
+//            newLoadRequired = savedInstanceState.getBoolean(NEW_LOAD_REQUIRED, true);
+            mPhotos = savedInstanceState.getParcelableArrayList(PHOTOS_LOADED);
         }
 
-        call.enqueue(new Callback<List<Photo>>() {
-            @Override
-            public void onResponse(Call<List<Photo>> call, Response<List<Photo>> response) {
+//        if (newLoadRequired) {
+//            Log.d(TAG, "onActivityCreated: restartLoader...");
+//            getLoaderManager().restartLoader(PHOTO_LOADER_ID, null, this);
+//        }
 
-/*
-                String msg = "Successful Request!";
-                Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
-*/
 
-                // LOG some Response Headers
-                Log.d(TAG, "onResponse: <RESPONSE HEADERS>" );
-                String xPerPage = response.headers().get("X-Per-Page");
-                Log.d(TAG, "onResponse: X-Per-Page: " + xPerPage);
-                String xTotal = response.headers().get("X-Total");
-                Log.d(TAG, "onResponse: X-Total: " + xTotal);
-
-                // LOG Response Body
-                Log.d(TAG, "onResponse: <RESPONSE BODY>");
-                Log.d(TAG, "onResponse: Size = " + response.body().size());
-
-                if (response.body().size() > 0) {
-
-                    mPhotos.clear();
-                    mPhotoAdapter.notifyDataSetChanged();
-
-                    int count = response.body().size();
-                    for (int i = 0; i < count; i++) {
-                        Photo current = response.body().get(i);
-                        mPhotos.add(i, current);
-                        mPhotoAdapter.notifyItemChanged(i);
-                    }
-//                    mPhotoAdapter.notifyDataSetChanged();
-                    mRecyclerView.scrollToPosition(0);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Photo>> call, Throwable t) {
-
-            }
-        });
     }
 
+    /**
+     * Called when the Fragment is visible to the user.  This is generally
+     * tied to {@link Activity#onStart() Activity.onStart} of the containing
+     * Activity's lifecycle.
+     */
+    @Override
+    public void onStart() {
+        Log.d(TAG, "onStart: ");
+        super.onStart();
+    }
+
+    /**
+     * Called when the fragment is visible to the user and actively running.
+     * This is generally
+     * tied to {@link Activity#onResume() Activity.onResume} of the containing
+     * Activity's lifecycle.
+     */
+    @Override
+    public void onResume() {
+        Log.d(TAG, "onResume: ");
+        super.onResume();
+    }
+
+    /**
+     * Called when the Fragment is no longer resumed.  This is generally
+     * tied to {@link Activity#onPause() Activity.onPause} of the containing
+     * Activity's lifecycle.
+     */
+    @Override
+    public void onPause() {
+        Log.d(TAG, "onPause: ");
+        super.onPause();
+    }
+
+    /**
+     * Called when the Fragment is no longer started.  This is generally
+     * tied to {@link Activity#onStop() Activity.onStop} of the containing
+     * Activity's lifecycle.
+     */
+    @Override
+    public void onStop() {
+        Log.d(TAG, "onStop: ");
+        super.onStop();
+    }
+
+    /**
+     * Called to ask the fragment to save its current dynamic state, so it
+     * can later be reconstructed in a new instance of its process is
+     * restarted.  If a new instance of the fragment later needs to be
+     * created, the data you place in the Bundle here will be available
+     * in the Bundle given to {@link #onCreate(Bundle)},
+     * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}, and
+     * {@link #onActivityCreated(Bundle)}.
+     * <p/>
+     * <p>This corresponds to {@link Activity#onSaveInstanceState(Bundle)
+     * Activity.onSaveInstanceState(Bundle)} and most of the discussion there
+     * applies here as well.  Note however: <em>this method may be called
+     * at any time before {@link #onDestroy()}</em>.  There are many situations
+     * where a fragment may be mostly torn down (such as when placed on the
+     * back stack with no UI showing), but its state will not be saved until
+     * its owning activity actually needs to save its state.
+     *
+     * @param outState Bundle in which to place your saved state.
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+//        Log.d(TAG, "onSaveInstanceState: " + newLoadRequired + " " + mPhotos.size());
+//        outState.putBoolean(NEW_LOAD_REQUIRED, newLoadRequired);
+        outState.putParcelableArrayList(PHOTOS_LOADED, mPhotos);
+        super.onSaveInstanceState(outState);
+    }
+
+    //
+    //
+    // LoaderCallbacks
+    //
+    //
+    /**
+     * Instantiate and return a new Loader for the given ID.
+     *
+     * @param id   The ID whose loader is to be created.
+     * @param args Any arguments supplied by the caller.
+     * @return Return a new Loader instance that is ready to start loading.
+     */
+    @Override
+    public Loader<List<Photo>> onCreateLoader(int id, Bundle args) {
+        PhotosLoader photosLoader = new PhotosLoader(getActivity(), mCategoryId, mCategoryTitle);
+        return photosLoader;
+    }
+
+    /**
+     * Called when a previously created loader has finished its load.
+     * @param loader The Loader that has finished.
+     * @param data   The data generated by the Loader.
+     */
+    @Override
+    public void onLoadFinished(Loader<List<Photo>> loader, List<Photo> data) {
+        Log.d(TAG, "onLoadFinished: " + data.size());
+
+        mPhotos.clear();
+        mPhotoAdapter.notifyDataSetChanged();
+
+        int count = data.size();
+        for (int i = 0; i < count; i++) {
+            Photo current = data.get(i);
+            mPhotos.add(i, current);
+            mPhotoAdapter.notifyItemChanged(i);
+        }
+        mPhotoAdapter.notifyDataSetChanged();
+        mRecyclerView.scrollToPosition(0);
+
+//        newLoadRequired = false;
+    }
+
+    /**
+     * Called when a previously created loader is being reset, and thus
+     * making its data unavailable.  The application should at this point
+     * remove any references it has to the Loader's data.
+     *
+     * @param loader The Loader that is being reset.
+     */
+    @Override
+    public void onLoaderReset(Loader<List<Photo>> loader) {
+        Log.d(TAG, "onLoaderReset: ");
+        mPhotos.clear();
+        mPhotoAdapter.notifyDataSetChanged();
+
+//        newLoadRequired = true;
+    }
 
 }

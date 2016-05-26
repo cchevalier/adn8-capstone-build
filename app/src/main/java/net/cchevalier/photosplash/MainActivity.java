@@ -1,5 +1,6 @@
 package net.cchevalier.photosplash;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
@@ -8,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -19,34 +21,24 @@ import net.cchevalier.photosplash.fragments.PhotosByCategoryFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public final String TAG = "PhotoSplash";
+    public final String TAG = "PhotoSplash-Main";
 
-/*
-    private ArrayList<Photo> mPhotos;
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private PhotoAdapter mPhotoAdapter;
-*/
+    private static final String CATEGORY_TITLE = "Category_Title";
+    private static final String CATEGORY_ID = "Category_Id";
+
+    public String mCategoryTitle = "PhotoSplash";
+    public int mCategoryId = -1;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: ");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-/*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_refresh);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Retrieving photos...", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -57,28 +49,135 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-/*
-        // RecyclerView stuff
-        mPhotos = new ArrayList<>();
-        mPhotoAdapter = new PhotoAdapter(mPhotos);
-
-        // Adaptive Grid based on screen width
-        // see https://www.udacity.com/course/viewer#!/c-ud862-nd/l-4964230471/m-4904228664
-        int nCols = getResources().getInteger(R.integer.photos_columns);
-        mLayoutManager = new StaggeredGridLayoutManager(nCols, GridLayoutManager.VERTICAL);
-        mRecyclerView = (RecyclerView) findViewById(R.id.photos_recycler_view);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mPhotoAdapter);
-*/
-
         // Track Picasso perfs
         Picasso
                 .with(getBaseContext())
                 .setIndicatorsEnabled(true);
+
+        if (savedInstanceState != null) {
+//            String savedCategoryTitle = savedInstanceState.getString(CATEGORY_TITLE, "Fav");
+//            int savedCategoryId = savedInstanceState.getInt(CATEGORY_ID, -1);
+//            Log.d(TAG, "onCreate: saved: " + savedCategoryId + " " + savedCategoryTitle);
+            mCategoryTitle = savedInstanceState.getString(CATEGORY_TITLE, "WTF");
+            mCategoryId = savedInstanceState.getInt(CATEGORY_ID, 99);
+        }
+        addSelectedFragment();
+    }
+
+    /**
+     * Dispatch onStart() to all fragments.  Ensure any created loaders are
+     * now started.
+     */
+    @Override
+    protected void onStart() {
+        Log.d(TAG, "onStart: ");
+        super.onStart();
+    }
+
+    /**
+     * Dispatch onResume() to fragments.  Note that for better inter-operation
+     * with older versions of the platform, at the point of this call the
+     * fragments attached to the activity are <em>not</em> resumed.  This means
+     * that in some cases the previous state may still be saved, not allowing
+     * fragment transactions that modify the state.  To correctly interact
+     * with fragments in their proper state, you should instead override
+     * {@link #onResumeFragments()}.
+     */
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume: ");
+        super.onResume();
+    }
+
+    /**
+     * This is the fragment-orientated version of {@link #onResume()} that you
+     * can override to perform operations in the Activity at the same point
+     * where its fragments are resumed.  Be sure to always call through to
+     * the super-class.
+     */
+    @Override
+    protected void onResumeFragments() {
+        Log.d(TAG, "onResumeFragments: ");
+        super.onResumeFragments();
+    }
+
+    /**
+     * Dispatch onPause() to fragments.
+     */
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "onPause: ");
+        super.onPause();
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState: ");
+        outState.putString(CATEGORY_TITLE, mCategoryTitle);
+        outState.putInt(CATEGORY_ID,mCategoryId);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "onStop: ");
+        super.onStop();
+    }
+
+    /**
+     * Called after {@link #onStop} when the current activity is being
+     * re-displayed to the user (the user has navigated back to it).  It will
+     * be followed by {@link #onStart} and then {@link #onResume}.
+     * <p/>
+     * <p>For activities that are using raw {@link Cursor} objects (instead of
+     * creating them through
+     * {@link #managedQuery(Uri, String[], String, String[], String)},
+     * this is usually the place
+     * where the cursor should be requeried (because you had deactivated it in
+     * {@link #onStop}.
+     * <p/>
+     * <p><em>Derived classes must call through to the super class's
+     * implementation of this method.  If they do not, an exception will be
+     * thrown.</em></p>
+     *
+     * @see #onStop
+     * @see #onStart
+     * @see #onResume
+     */
+    @Override
+    protected void onRestart() {
+        Log.d(TAG, "onRestart: ");
+        super.onRestart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy: ");
+        super.onDestroy();
+    }
+
+    private void addSelectedFragment() {
+        Log.d(TAG, "addSelectedFragment: " + mCategoryId + " " + mCategoryTitle);
+
+        getSupportActionBar().setTitle(mCategoryTitle);
+
+        // Begin the transaction
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        if (mCategoryId >= 0) {
+            // Replace the contents of the container with the new fragment
+            ft.replace(R.id.fragment_container, PhotosByCategoryFragment.newInstance(mCategoryTitle, mCategoryId));
+        } else {
+            ft.replace(R.id.fragment_container, FavoritesPhotosFragment.newInstance(mCategoryTitle, "World"));
+        }
+        // Complete the changes added above
+        ft.commit();
+    }
+
+
+    @Override
     public void onBackPressed() {
+        Log.d(TAG, "onBackPressed: ");
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -89,6 +188,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d(TAG, "onCreateOptionsMenu: ");
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -96,6 +197,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected: ");
+
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -112,58 +215,46 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        String selected = "PhotoSplash";
-        int choice;
 
         if (id == R.id.nav_category_favorites) {
-            selected = "Favorites";
-            choice = -1;
+            mCategoryTitle = "Favorites";
+            mCategoryId = -1;
         } else if (id == R.id.nav_category_new) {
-            selected = "New";
-            choice = 0;
+            mCategoryTitle = "New";
+            mCategoryId = 0;
         } else if (id == R.id.nav_category_featured) {
-            selected = "Featured";
-            choice = 1;
+            mCategoryTitle = "Featured";
+            mCategoryId = 1;
         } else if (id == R.id.nav_category_buildings) {
-            selected = "Buildings";
-            choice = 2;
+            mCategoryTitle = "Buildings";
+            mCategoryId = 2;
         } else if (id == R.id.nav_category_food) {
-            selected = "Food";
-            choice = 3;
+            mCategoryTitle = "Food";
+            mCategoryId = 3;
         } else if (id == R.id.nav_category_nature) {
-            selected = "Nature";
-            choice = 4;
+            mCategoryTitle = "Nature";
+            mCategoryId = 4;
         } else if (id == R.id.nav_category_objects) {
-            selected = "Objects";
-            choice = 8;
+            mCategoryTitle = "Objects";
+            mCategoryId = 8;
         } else if (id == R.id.nav_category_people) {
-            selected = "People";
-            choice = 6;
+            mCategoryTitle = "People";
+            mCategoryId = 6;
         } else if (id == R.id.nav_category_technology) {
-            selected = "Technology";
-            choice = 7;
+            mCategoryTitle = "Technology";
+            mCategoryId = 7;
         } else {
-            choice = 99;
+            mCategoryTitle = "Undefined";
+            mCategoryId = 99;
         }
+        Log.d(TAG, "onNavigationItemSelected: " + mCategoryTitle);
 
-        getSupportActionBar().setTitle(selected);
-
-        // Begin the transaction
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        if (choice >= 0) {
-            // Replace the contents of the container with the new fragment
-            ft.replace(R.id.fragment_container, PhotosByCategoryFragment.newInstance(selected, choice));
-        } else {
-            ft.replace(R.id.fragment_container, FavoritesPhotosFragment.newInstance(selected, "World"));
-        }
-        // Complete the changes added above
-        ft.commit();
-/*
-        getPhotos(choice);
-*/
+        getSupportActionBar().setTitle(mCategoryTitle);
+        addSelectedFragment();
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -172,83 +263,4 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-/*
-    //
-    //
-    public void getPhotos(int choice) {
-
-        int page = 1;
-        int perPage = 20;
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UnsplashService.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        UnsplashService unsplashService = retrofit.create(UnsplashService.class);
-
-        Call<List<Photo>> call;
-
-        switch (choice) {
-            case 0: // "New"
-                call = unsplashService.getNewPhotos(page, perPage);
-                break;
-            case 1:
-                call = unsplashService.getFeaturedPhotos(page, perPage);
-                break;
-            case 2:
-            case 3:
-            case 4:
-            case 6:
-            case 7:
-            case 8:
-                call = unsplashService.getPhotosFromCategory(choice, page, perPage);
-                break;
-            default:
-                call = unsplashService.getSearchPhotos("yellow", 1, 18);
-                break;
-        }
-
-        call.enqueue(new Callback<List<Photo>>() {
-            @Override
-            public void onResponse(Call<List<Photo>> call, Response<List<Photo>> response) {
-
-                String msg = "Successful Request!";
-                Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
-
-                // LOG some Response Headers
-                Log.d(TAG, "onResponse: <RESPONSE HEADERS>" );
-                String xPerPage = response.headers().get("X-Per-Page");
-                Log.d(TAG, "onResponse: X-Per-Page: " + xPerPage);
-                String xTotal = response.headers().get("X-Total");
-                Log.d(TAG, "onResponse: X-Total: " + xTotal);
-
-                // LOG Response Body
-                Log.d(TAG, "onResponse: <RESPONSE BODY>");
-                Log.d(TAG, "onResponse: Size = " + response.body().size());
-
-                if (response.body().size() > 0) {
-
-                    mPhotos.clear();
-                    mPhotoAdapter.notifyDataSetChanged();
-
-                    int count = response.body().size();
-                    for (int i = 0; i < count; i++) {
-                        Photo current = response.body().get(i);
-                        mPhotos.add(i, current);
-                        mPhotoAdapter.notifyItemChanged(i);
-                    }
-//                    mPhotoAdapter.notifyDataSetChanged();
-                    mRecyclerView.scrollToPosition(0);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Photo>> call, Throwable t) {
-
-            }
-        });
-    }
-
-*/
 }

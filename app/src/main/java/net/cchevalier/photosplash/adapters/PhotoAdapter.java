@@ -16,6 +16,7 @@ import net.cchevalier.photosplash.models.Photo;
 import net.cchevalier.photosplash.ui.custom.DynamicHeightImageView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by cch on 11/05/2016.
@@ -24,7 +25,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
 
     public final String TAG = "PhotoSplash";
 
-        private ArrayList<Photo> mPhotos;
+        private List<Photo> mPhotos;
 
         // ViewHolder
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -38,11 +39,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
                 authorView = (TextView) itemView.findViewById(R.id.list_item_author);
             }
 
-            /**
-             * Called when a view has been clicked.
-             *
-             * @param v The view that was clicked.
-             */
+            // onClick (used for photoView)
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick on " + getPosition() + ": " + mPhotos.get(getPosition()).urls.regular);
@@ -60,7 +57,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
         }
 
         // Constructor
-        public PhotoAdapter(ArrayList<Photo> photos) {
+        public PhotoAdapter(List<Photo> photos) {
             this.mPhotos = photos;
         }
 
