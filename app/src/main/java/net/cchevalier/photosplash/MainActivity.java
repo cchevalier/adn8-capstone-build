@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
 import net.cchevalier.photosplash.fragments.FavoritePhotosFragment;
@@ -23,10 +25,12 @@ public class MainActivity extends AppCompatActivity
 
     public final String TAG = "PhotoSplash-Main";
 
+    private Tracker mTracker;
+
     private static final String CATEGORY_TITLE = "Category_Title";
     private static final String CATEGORY_ID = "Category_Id";
 
-    public String mCategoryTitle = "PhotoSplash";
+    public String mCategoryTitle = "Favorites";
     public int mCategoryId = -1;
 
 
@@ -36,6 +40,19 @@ public class MainActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+/*
+        // Make sure that Analytics tracking has started
+        ((PhotosplashApplication) getApplication()).startTracking();
+*/
+
+        // [START shared_tracker]
+        // Obtain the shared Tracker instance.
+        PhotosplashApplication application = (PhotosplashApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        // [END shared_tracker]
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,6 +79,7 @@ public class MainActivity extends AppCompatActivity
             mCategoryId = savedInstanceState.getInt(CATEGORY_ID, 99);
         }
         addSelectedFragment();
+        sendScreenCategoryName();
     }
 
     /**
@@ -255,12 +273,22 @@ public class MainActivity extends AppCompatActivity
 
         getSupportActionBar().setTitle(mCategoryTitle);
         addSelectedFragment();
-
+        sendScreenCategoryName();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+
+    private void sendScreenCategoryName() {
+
+        // [START screen_view_hit]
+        Log.i(TAG, "Setting screen name: " + mCategoryTitle);
+        mTracker.setScreenName("Category " + mCategoryTitle);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        // [END screen_view_hit]
+
+    }
 
 }

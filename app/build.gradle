@@ -42,4 +42,10 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
+
+    /* Google Play Services */
+    compile 'com.google.android.gms:play-services-analytics:9.0.0'
 }
+
+// Add the plugin to the bottom of your app-level build.gradle:
+apply plugin: 'com.google.gms.google-services'
