@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
-    tools:context="net.cchevalier.photosplash.fragments.FavoritesPhotosFragment">
+    tools:context=".fragments.FavoritePhotosFragment">
 
 <!--
     <android.support.v7.widget.RecyclerView
@@ -20,6 +20,8 @@
         android:id="@+id/lv_favorites"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        tools:listitem="@layout/item_favorite"
+        android:layout_gravity="center_horizontal"
+>
     </ListView>
 </LinearLayout>

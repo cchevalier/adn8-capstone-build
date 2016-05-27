@@ -15,7 +15,7 @@ import android.view.MenuItem;
 
 import com.squareup.picasso.Picasso;
 
-import net.cchevalier.photosplash.fragments.FavoritesPhotosFragment;
+import net.cchevalier.photosplash.fragments.FavoritePhotosFragment;
 import net.cchevalier.photosplash.fragments.PhotosByCategoryFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity
             // Replace the contents of the container with the new fragment
             ft.replace(R.id.fragment_container, PhotosByCategoryFragment.newInstance(mCategoryTitle, mCategoryId));
         } else {
-            ft.replace(R.id.fragment_container, FavoritesPhotosFragment.newInstance(mCategoryTitle, "World"));
+            ft.replace(R.id.fragment_container, FavoritePhotosFragment.newInstance(mCategoryTitle));
         }
         // Complete the changes added above
         ft.commit();
