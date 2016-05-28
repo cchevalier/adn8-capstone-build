@@ -43,8 +43,9 @@ dependencies {
 
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
 
-    /* Google Play Services */
+    // Google Play Services: Analytics and Ads
     compile 'com.google.android.gms:play-services-analytics:9.0.0'
+    compile 'com.google.android.gms:play-services-ads:9.0.0'
 }
 
 // Add the plugin to the bottom of your app-level build.gradle:
