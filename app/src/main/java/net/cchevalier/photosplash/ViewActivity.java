@@ -7,14 +7,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -28,6 +28,8 @@ public class ViewActivity extends AppCompatActivity {
 
     private final String TAG = "PhotoSplash";
 
+    private Tracker mTracker;
+
     private Photo currentPhoto;
     private boolean isFavorite;
 
@@ -40,6 +42,11 @@ public class ViewActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_view);
 
+        // Obtain the shared Tracker instance.
+        PhotosplashApplication application = (PhotosplashApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+
+        //
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
@@ -70,48 +77,11 @@ public class ViewActivity extends AppCompatActivity {
         // Favorite FAB
         fabFavorite = (FloatingActionButton) findViewById(R.id.fab_favorite);
         updateFavoriteFAB(isFavorite);
-/*
-        if (isFavorite) {
-            fabFavorite.setImageResource(R.drawable.heart_full);
-        }
-*/
         fabFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 UpdateFavoriteStatus task = new UpdateFavoriteStatus();
                 task.execute();
-
-/*
-                Snackbar.make(view, "Added to your favorites", Snackbar.LENGTH_LONG)
-                        .setAction("Undo", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                            }
-                        })
-                        .show();
-
-                if (!isFavorite) {
-                    addToFavorites();
-
-                    Snackbar.make(view, "Added to your favorites", Snackbar.LENGTH_LONG)
-                            .setAction("Undo", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                }
-                            })
-                            .show();
-
-                    isFavorite = !isFavorite;
-                } else {
-                    Snackbar.make(view, "Already in your favorites", Snackbar.LENGTH_LONG)
-                            .setAction("Undo", null)
-                            .show();
-                }
-*/
-
             }
         });
 
@@ -140,46 +110,19 @@ public class ViewActivity extends AppCompatActivity {
         });
     }
 
-/*
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-    private void addToFavorites() {
-
-        new AsyncTask<Void, Void, Void>() {
-
-            */
-/**
-             * Override this method to perform a computation on a background thread.
-             *//*
-
-            @Override
-            protected Void doInBackground(Void... params) {
-
-                ContentValues values = new ContentValues();
-
-                values.put(PhotosplashContract.Favorites.COLUMN_PHOTO_ID, currentPhoto.id);
-                values.put(PhotosplashContract.Favorites.COLUMN_WIDTH, currentPhoto.width);
-                values.put(PhotosplashContract.Favorites.COLUMN_HEIGHT, currentPhoto.height);
-                values.put(PhotosplashContract.Favorites.COLUMN_COLOR, currentPhoto.color);
-                values.put(PhotosplashContract.Favorites.COLUMN_USER_ID, currentPhoto.user.id);
-                values.put(PhotosplashContract.Favorites.COLUMN_USER_NAME, currentPhoto.user.name);
-                values.put(PhotosplashContract.Favorites.COLUMN_URLS_FULL, currentPhoto.urls.full);
-                values.put(PhotosplashContract.Favorites.COLUMN_URLS_REGULAR, currentPhoto.urls.regular);
-                values.put(PhotosplashContract.Favorites.COLUMN_URLS_SMALL, currentPhoto.urls.small);
-
-                Uri uri = getContentResolver().insert(PhotosplashContract.Favorites.CONTENT_URI, values);
-//                Log.d(TAG, "doInBackground: " + uri.toString());
-                return null;
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Photo")
+                .setAction("View")
+                .build());
     }
 
-*/
 
     private class UpdateFavoriteStatus extends AsyncTask<Void, Void, Boolean> {
 
-        /**
-         * Override this method to perform a computation on a background thread.
-         */
         @Override
         protected Boolean doInBackground(Void... params) {
 
@@ -193,6 +136,11 @@ public class ViewActivity extends AppCompatActivity {
                         PhotosplashContract.Favorites.COLUMN_PHOTO_ID + " = '" + currentPhoto.id + "'",
                         null
                 );
+
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Favorite")
+                        .setAction("Remove")
+                        .build());
 
                 newStatus = false;
             } else {
@@ -212,16 +160,16 @@ public class ViewActivity extends AppCompatActivity {
                         values
                 );
 
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Favorite")
+                        .setAction("Add")
+                        .build());
+
                 newStatus = true;
             }
             return newStatus;
         }
 
-
-        /**
-         * <p>Runs on the UI thread after {@link #doInBackground}. The
-         * specified result is the value returned by {@link #doInBackground}.</p>
-         */
         @Override
         protected void onPostExecute(Boolean newStatus) {
             //super.onPostExecute(newStatus);
@@ -229,6 +177,7 @@ public class ViewActivity extends AppCompatActivity {
             updateFavoriteFAB(newStatus);
         }
     }
+
 
     private void updateFavoriteFAB(Boolean favoriteStatus) {
         if (favoriteStatus) {
@@ -254,6 +203,5 @@ public class ViewActivity extends AppCompatActivity {
             return false;
         }
     }
-
 
 }

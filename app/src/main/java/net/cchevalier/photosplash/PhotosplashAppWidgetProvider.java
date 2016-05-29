@@ -26,9 +26,9 @@ public class PhotosplashAppWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-//        super.onUpdate(context, appWidgetManager, appWidgetIds);
 
-        Log.d(TAG, "onUpdate: Start");
+        int nWidgets = appWidgetIds.length;
+        Log.d(TAG, "onUpdate: Starting for " + nWidgets + " widgets.");
 
         // Define the columns to retrieve
         String[] projectionFields = new String[] {
@@ -47,36 +47,39 @@ public class PhotosplashAppWidgetProvider extends AppWidgetProvider {
                 null // the sort order
         );
 
-        if (cursor == null || cursor.getCount() == 0) {
-            Log.d(TAG, "onUpdate: cursor null or empty");
+        if (cursor == null ) {
+            Log.d(TAG, "onUpdate: cursor null");
             return;
         }
 
-        Picasso picasso = Picasso.with(context);
+        if (cursor.getCount() == 0) {
+            Log.d(TAG, "onUpdate: cursor empty");
+            cursor.close();
+            return;
+        }
 
         int nFavorites = cursor.getCount();
 
-//        for (int i=0; i<appWidgetIds.length; i++) {
+        for (int i=0; i < nWidgets; i++) {
 
-//            int appWidgetId = appWidgetIds[i];
-
-            RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.photosplash_appwidget);
+            int appWidgetId = appWidgetIds[i];
 
             int random = new Random().nextInt(nFavorites);
             cursor.moveToPosition(random);
+            Log.d(TAG, "onUpdate: " + i + " " + cursor.getString(1));
             String urlSmall = cursor.getString(4);
-            Log.d(TAG, "onUpdate: " + urlSmall);
-            picasso.load(urlSmall)
-                    .into(remoteView, R.id.iv_widget_photo, appWidgetIds);
 
+            RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.photosplash_appwidget);
 
-
-
-//        }
-
-        appWidgetManager.updateAppWidget(appWidgetIds, remoteView);
+            Picasso.with(context)
+                    .load(urlSmall)
+                    .into(remoteView, R.id.iv_widget_photo, new int[]{appWidgetId}  ) ;
+            appWidgetManager.updateAppWidget(appWidgetId, remoteView);
+        }
 
         cursor.close();
+
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
 
