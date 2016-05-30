@@ -1,4 +1,4 @@
-package net.cchevalier.photosplash;
+package net.cchevalier.photosplash.activities.view;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -18,6 +18,8 @@ import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import net.cchevalier.photosplash.PhotosplashApplication;
+import net.cchevalier.photosplash.R;
 import net.cchevalier.photosplash.data.PhotosplashContract;
 import net.cchevalier.photosplash.models.Photo;
 
@@ -40,7 +42,7 @@ public class ViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_view);
+        setContentView(R.layout.view_activity);
 
         // Obtain the shared Tracker instance.
         PhotosplashApplication application = (PhotosplashApplication) getApplication();

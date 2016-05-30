@@ -1,4 +1,4 @@
-package net.cchevalier.photosplash;
+package net.cchevalier.photosplash.widgets;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -11,16 +11,17 @@ import android.widget.RemoteViews;
 
 import com.squareup.picasso.Picasso;
 
+import net.cchevalier.photosplash.R;
 import net.cchevalier.photosplash.data.PhotosplashContract;
 
 import java.util.Random;
 
 /**
- * PhotosplashAppWidgetProvider
+ * FavoritesWidgetProvider
  *
  * Created by cch on 28/05/2016.
  */
-public class PhotosplashAppWidgetProvider extends AppWidgetProvider {
+public class FavoritesWidgetProvider extends AppWidgetProvider {
 
     private static final String TAG = "Photosplash-Widget";
 
@@ -69,7 +70,7 @@ public class PhotosplashAppWidgetProvider extends AppWidgetProvider {
             Log.d(TAG, "onUpdate: " + i + " " + cursor.getString(1));
             String urlSmall = cursor.getString(4);
 
-            RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.photosplash_appwidget);
+            RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.favorites_widget);
 
             Picasso.with(context)
                     .load(urlSmall)

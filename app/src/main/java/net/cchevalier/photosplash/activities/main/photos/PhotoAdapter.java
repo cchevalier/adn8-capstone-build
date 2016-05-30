@@ -1,4 +1,4 @@
-package net.cchevalier.photosplash.adapters;
+package net.cchevalier.photosplash.activities.main.photos;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -11,11 +11,10 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import net.cchevalier.photosplash.R;
-import net.cchevalier.photosplash.ViewActivity;
+import net.cchevalier.photosplash.activities.view.ViewActivity;
 import net.cchevalier.photosplash.models.Photo;
 import net.cchevalier.photosplash.ui.custom.DynamicHeightImageView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

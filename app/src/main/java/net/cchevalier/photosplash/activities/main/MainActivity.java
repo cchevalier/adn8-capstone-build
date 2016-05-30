@@ -1,4 +1,4 @@
-package net.cchevalier.photosplash;
+package net.cchevalier.photosplash.activities.main;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,8 +19,10 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
-import net.cchevalier.photosplash.fragments.FavoritePhotosFragment;
-import net.cchevalier.photosplash.fragments.PhotosByCategoryFragment;
+import net.cchevalier.photosplash.PhotosplashApplication;
+import net.cchevalier.photosplash.R;
+import net.cchevalier.photosplash.activities.main.favorites.FavoritePhotosFragment;
+import net.cchevalier.photosplash.activities.main.photos.PhotosByCategoryFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onCreate: ");
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
 
 /*
         // Make sure that Analytics tracking has started
@@ -219,7 +221,7 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onCreateOptionsMenu: ");
 
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 

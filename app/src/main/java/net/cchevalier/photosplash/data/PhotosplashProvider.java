@@ -44,7 +44,7 @@ public class PhotosplashProvider extends ContentProvider {
      *
      * Implement this to initialize your content provider on startup.
      * This method is called for all registered content providers on the
-     * application main thread at application launch time.  It must not perform
+     * application main_menu thread at application launch time.  It must not perform
      * lengthy operations, or application startup will be delayed.
      */
     @Override

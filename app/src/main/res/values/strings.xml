@@ -7,19 +7,24 @@
 
     <string name="action_settings">Settings</string>
 
+    <string name="title_activity_view">View Photo</string>
+
+    <!-- Photosplash categories -->
+    <string name="category">Category</string>
+
+    <string name="category_favorites">Favorites</string>
+
     <string name="category_new">New</string>
     <string name="category_featured">Featured</string>
-    <string name="category_favorites">Your Favorites</string>
 
-    <string name="category">Category</string>
     <string name="category_buildings">Buildings</string>
     <string name="category_food">Food and Drinks</string>
     <string name="category_nature">Nature</string>
     <string name="category_objects">Objects</string>
     <string name="category_people">People</string>
     <string name="category_technology">Technology</string>
-    <string name="title_activity_view">ViewActivity</string>
 
+    <!-- AdMob -->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 
 

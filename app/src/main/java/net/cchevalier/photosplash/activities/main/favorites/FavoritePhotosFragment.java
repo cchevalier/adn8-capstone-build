@@ -1,4 +1,4 @@
-package net.cchevalier.photosplash.fragments;
+package net.cchevalier.photosplash.activities.main.favorites;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import net.cchevalier.photosplash.R;
-import net.cchevalier.photosplash.adapters.FavoritePhotoCursorAdapter;
 import net.cchevalier.photosplash.data.PhotosplashContract;
 
 /**
@@ -55,7 +54,7 @@ public class FavoritePhotosFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_favorite_photos, container, false);
+        View rootView = inflater.inflate(R.layout.main_favorite_photos_fragment, container, false);
         ListView lvFavorites = (ListView) rootView.findViewById(R.id.lv_favorites);
         mFavoritePhotoCursorAdapter = new FavoritePhotoCursorAdapter(getActivity(), null, 0);
         lvFavorites.setAdapter(mFavoritePhotoCursorAdapter);

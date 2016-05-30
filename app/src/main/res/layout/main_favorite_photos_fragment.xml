@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
-    tools:context=".fragments.FavoritePhotosFragment">
+    tools:context=".activities.main.favorites.FavoritePhotosFragment">
 
     <ListView
         android:id="@+id/lv_favorites"

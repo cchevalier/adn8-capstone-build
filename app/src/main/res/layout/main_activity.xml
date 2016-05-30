@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="net.cchevalier.photosplash.MainActivity">
+        tools:context=".activities.main.MainActivity">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -61,8 +61,8 @@
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer"
+        app:headerLayout="@layout/main_side_nav_header"
+        app:menu="@menu/main_side_nav_drawer_menu"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"

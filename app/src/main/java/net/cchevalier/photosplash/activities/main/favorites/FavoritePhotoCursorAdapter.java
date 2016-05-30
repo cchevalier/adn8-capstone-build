@@ -1,4 +1,4 @@
-package net.cchevalier.photosplash.adapters;
+package net.cchevalier.photosplash.activities.main.favorites;
 
 import android.content.Context;
 import android.database.Cursor;

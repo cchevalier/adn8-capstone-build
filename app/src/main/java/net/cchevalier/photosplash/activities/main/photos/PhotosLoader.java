@@ -1,4 +1,4 @@
-package net.cchevalier.photosplash;
+package net.cchevalier.photosplash.activities.main.photos;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
@@ -100,7 +100,7 @@ public class PhotosLoader extends AsyncTaskLoader<List<Photo>> {
     /**
      * Sends the result of the load to the registered listener. Should only be called by subclasses.
      * <p/>
-     * Must be called from the process's main thread.
+     * Must be called from the process's main_menu thread.
      *
      * @param data the result of the load
      */

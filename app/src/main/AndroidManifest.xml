@@ -20,7 +20,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.main.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar">
@@ -32,13 +32,13 @@
         </activity>
 
         <activity
-            android:name=".ViewActivity"
+            android:name=".activities.view.ViewActivity"
             android:label="@string/title_activity_view"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.cchevalier.photosplash.MainActivity" />
+                android:value=".activities.main.MainActivity" />
         </activity>
 
         <provider
@@ -47,13 +47,12 @@
             android:exported="false">
         </provider>
 
-        <receiver android:name=".PhotosplashAppWidgetProvider">
+        <receiver android:name=".widgets.FavoritesWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
-                android:resource="@xml/photosplash_appwidget_info" />
-
+                android:resource="@xml/favorites_widget_info" />
         </receiver>
 
     </application>

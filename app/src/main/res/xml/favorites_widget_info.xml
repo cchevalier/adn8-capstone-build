@@ -4,7 +4,7 @@
     android:minHeight="110dp"
     android:updatePeriodMillis="1800000"
     android:previewImage="@drawable/heart_full"
-    android:initialLayout="@layout/photosplash_appwidget"
+    android:initialLayout="@layout/favorites_widget"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen">
 </appwidget-provider>

@@ -1,4 +1,4 @@
-package net.cchevalier.photosplash.fragments;
+package net.cchevalier.photosplash.activities.main.photos;
 
 
 import android.os.Bundle;
@@ -14,9 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import net.cchevalier.photosplash.PhotosLoader;
 import net.cchevalier.photosplash.R;
-import net.cchevalier.photosplash.adapters.PhotoAdapter;
 import net.cchevalier.photosplash.models.Photo;
 
 import java.util.ArrayList;
@@ -96,7 +94,7 @@ public class PhotosByCategoryFragment extends Fragment
         Log.d(TAG, "onCreateView: ");
 
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_photos_by_category, container, false);
+        View rootView = inflater.inflate(R.layout.main_photos_by_category_fragment, container, false);
 
         if (savedInstanceState != null) {
 //            newLoadRequired = savedInstanceState.getBoolean(NEW_LOAD_REQUIRED, true);
