@@ -4,8 +4,8 @@
     From: http://developer.android.com/training/material/drawables.html#VectorDrawables
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:height="256dp"
-    android:width="256dp"
+    android:height="32dp"
+    android:width="32dp"
     android:viewportWidth="32"
     android:viewportHeight="32">
 
