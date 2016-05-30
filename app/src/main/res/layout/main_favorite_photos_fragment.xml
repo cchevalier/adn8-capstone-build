@@ -2,18 +2,19 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
     tools:context=".activities.main.favorites.FavoritePhotosFragment">
 
-    <ListView
-        android:id="@+id/lv_favorites"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_favorites"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/item_favorite"
-        android:layout_gravity="center_horizontal"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
-    </ListView>
+    </android.support.v7.widget.RecyclerView>
+
 
 </LinearLayout>

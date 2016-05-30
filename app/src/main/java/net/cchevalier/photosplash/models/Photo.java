@@ -24,6 +24,7 @@ public class Photo implements Parcelable {
     public final Urls urls;
 
 
+
     public Photo(String id, int width, int height, String color, int likes, boolean liked_by_user,
                  User user, Urls urls, List<Category> categories ) {
         this.id = id;
@@ -49,6 +50,23 @@ public class Photo implements Parcelable {
         this.categories = photo.categories;
     }
 
+    // We used this constructor when getting (simplified) favorite photo details from Content Provider
+    public Photo(String id, int width, int height, String color,
+                 String user_id, String user_name,
+                 String url_full, String url_regular, String url_small) {
+
+        this.id = id;
+        this.width = width;
+        this.height = height;
+        this.color = color;
+        this.likes = 0;
+        this.liked_by_user = false;
+
+        this.categories = null;
+        this.user = new User(user_id, "", user_name);
+        this.urls = new Urls("", url_full, url_regular, url_small, "");
+    }
+
     public String toString() {
         String res = "id: " + this.id;
         res = res + "\n w: " + this.width;
@@ -57,8 +75,11 @@ public class Photo implements Parcelable {
         res = res + "\n L: " + this.likes;
         res = res + "\n y: " + this.liked_by_user;
 
-        for (int i = 0; i < categories.size(); i++) {
-            res = res + "\n   cat: " + this.categories.get(i).title;
+        if (categories != null) {
+            for (int i = 0; i < categories.size(); i++) {
+                res = res + "\n   cat: " + this.categories.get(i).title;
+            }
+
         }
         return res;
     }

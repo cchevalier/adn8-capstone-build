@@ -169,6 +169,9 @@ public class ViewActivity extends AppCompatActivity {
 
                 newStatus = true;
             }
+
+            getContentResolver().notifyChange(PhotosplashContract.Favorites.CONTENT_URI, null);
+
             return newStatus;
         }
 

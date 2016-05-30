@@ -7,10 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import net.cchevalier.photosplash.R;
 import net.cchevalier.photosplash.data.PhotosplashContract;
@@ -22,7 +25,9 @@ public class FavoritePhotosFragment extends Fragment {
 
     public final String TAG = "PhotoSplash-FFrag";
 
-    private FavoritePhotoCursorAdapter mFavoritePhotoCursorAdapter;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private FavoriteAdapter mFavoriteAdapter;
 
     // From docs: A unique identifier for this loader. Can be whatever you want.
     public static final int FAVORITES_LOADER_ID = 44;
@@ -55,14 +60,22 @@ public class FavoritePhotosFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.main_favorite_photos_fragment, container, false);
-        ListView lvFavorites = (ListView) rootView.findViewById(R.id.lv_favorites);
-        mFavoritePhotoCursorAdapter = new FavoritePhotoCursorAdapter(getActivity(), null, 0);
-        lvFavorites.setAdapter(mFavoritePhotoCursorAdapter);
+
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_favorites);
+
+        int nCols = getResources().getInteger(R.integer.photos_columns);
+        mLayoutManager = new StaggeredGridLayoutManager(nCols, GridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mFavoriteAdapter = new FavoriteAdapter();
+        mRecyclerView.setAdapter(mFavoriteAdapter);
+
         return rootView;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onActivityCreated: ");
 
         // Initialize the loader with a special ID and the defined callbacks from above
         getActivity().getSupportLoaderManager().restartLoader(
@@ -82,11 +95,16 @@ public class FavoritePhotosFragment extends Fragment {
 
                     // Define the columns to retrieve
                     String[] projectionFields = new String[] {
-                            PhotosplashContract.Favorites._ID,
-                            PhotosplashContract.Favorites.COLUMN_PHOTO_ID,
-                            PhotosplashContract.Favorites.COLUMN_HEIGHT,
+                            PhotosplashContract.Favorites._ID, // 0
+                            PhotosplashContract.Favorites.COLUMN_PHOTO_ID, // 1
                             PhotosplashContract.Favorites.COLUMN_WIDTH,
-                            PhotosplashContract.Favorites.COLUMN_URLS_SMALL
+                            PhotosplashContract.Favorites.COLUMN_HEIGHT,
+                            PhotosplashContract.Favorites.COLUMN_COLOR,
+                            PhotosplashContract.Favorites.COLUMN_USER_ID,
+                            PhotosplashContract.Favorites.COLUMN_USER_NAME,
+                            PhotosplashContract.Favorites.COLUMN_URLS_FULL,
+                            PhotosplashContract.Favorites.COLUMN_URLS_REGULAR,
+                            PhotosplashContract.Favorites.COLUMN_URLS_SMALL //9
                     };
 
                     // Construct the loader
@@ -107,7 +125,7 @@ public class FavoritePhotosFragment extends Fragment {
                 // a call to the onLoadFinished() method takes place.
                 @Override
                 public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-                    mFavoritePhotoCursorAdapter.swapCursor(cursor);
+                    mFavoriteAdapter.swapCursor(cursor);
                 }
 
                 // This method is triggered when the loader is being reset
@@ -116,7 +134,7 @@ public class FavoritePhotosFragment extends Fragment {
                 @Override
                 public void onLoaderReset(Loader<Cursor> loader) {
                     // Clear the Cursor we were using with another call to the swapCursor()
-                    mFavoritePhotoCursorAdapter.swapCursor(null);
+                    mFavoriteAdapter.swapCursor(null);
                 }
             };
 }
