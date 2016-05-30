@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
+    android:background="#ffffff"
     >
 
     <ImageView
@@ -14,14 +15,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
-
-<!--
-    <TextView
-        android:id="@+id/tv_widget_author"
-        tools:text="Author"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
--->
 
 </LinearLayout>

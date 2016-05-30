@@ -7,11 +7,9 @@
             android:title="@string/category_favorites" />
         <item
             android:id="@+id/nav_category_new"
-            android:icon="@drawable/ic_menu_camera"
             android:title="@string/category_new" />
         <item
             android:id="@+id/nav_category_featured"
-            android:icon="@drawable/ic_menu_gallery"
             android:title="@string/category_featured" />
         <item
             android:id="@+id/nav_category_buildings"
@@ -33,6 +31,7 @@
             android:title="@string/category_technology" />
     </group>
 
+<!--
     <item android:title="@string/category">
         <menu>
             <item
@@ -40,5 +39,6 @@
                 android:title="@string/action_settings" />
         </menu>
     </item>
+-->
 
 </menu>
