@@ -28,7 +28,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class ViewActivity extends AppCompatActivity {
 
-    private final String TAG = "PhotoSplash";
+    private final String TAG = "PhotoSplash-View";
 
     private Tracker mTracker;
 
