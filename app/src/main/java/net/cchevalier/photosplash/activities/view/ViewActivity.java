@@ -60,14 +60,36 @@ public class ViewActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: " + currentPhoto.toString());
 
         // PhotoView handling
-        PhotoView photoView  = (PhotoView) findViewById(R.id.iv_photo);
+        final PhotoView photoView  = (PhotoView) findViewById(R.id.iv_photo);
         final PhotoViewAttacher attacher = new PhotoViewAttacher(photoView);
+
+        // Trying to ease the image load by using small (already in mem) then regular,
+        // full is far too expansive...
+        // See: https://futurestud.io/blog/picasso-placeholders-errors-and-fading
         Picasso.with(this)
-                .load(currentPhoto.urls.regular)
+                .load(currentPhoto.urls.small)
                 .into(photoView, new Callback() {
+
                     @Override
                     public void onSuccess() {
+                        Log.d(TAG, "onSuccess: small");
                         attacher.update();
+
+                        Picasso.with(getBaseContext())
+                                .load(currentPhoto.urls.regular)
+                                .noPlaceholder()
+                                .into(photoView, new Callback() {
+
+                                    @Override
+                                    public void onSuccess() {
+                                        Log.d(TAG, "onSuccess: regular");
+                                        attacher.update();
+                                    }
+
+                                    @Override
+                                    public void onError() {
+                                    }
+                                });
                     }
 
                     @Override
