@@ -23,14 +23,19 @@ public class PhotosLoader extends AsyncTaskLoader<List<Photo>> {
 
     private final String TAG = "PhotoSplash-ATL";
 
+    List<Photo> mPhotos;
+
     private int mCategoryId;
     private String mCategoryTitle;
 
-    List<Photo> mPhotos;
+    public PhotosLoader(Context context) {
+        super(context);
+        Log.d(TAG, "PhotosLoader: ");
+    }
 
     public PhotosLoader(Context context, int categoryId, String categoryTitle) {
         super(context);
-        Log.d(TAG, "PhotosLoader: " + categoryId + " " + categoryTitle);
+        Log.d(TAG, "PhotosLoader with: " + categoryId + " " + categoryTitle);
         mCategoryId = categoryId;
         mCategoryTitle = categoryTitle;
     }
@@ -42,7 +47,7 @@ public class PhotosLoader extends AsyncTaskLoader<List<Photo>> {
     @Override
     public List<Photo> loadInBackground() {
 
-        Log.d(TAG, "loadInBackground for category: " + mCategoryId + " " + mCategoryTitle);
+        Log.d(TAG, "loadInBackground starts for category: " + mCategoryId + " " + mCategoryTitle);
 
         List<Photo> photos = new ArrayList<>();
 
@@ -88,9 +93,9 @@ public class PhotosLoader extends AsyncTaskLoader<List<Photo>> {
                     photos.add(i, current);
                 }
             }
-
         } catch (IOException e ){
             // handle error
+            Log.d(TAG, "loadInBackground: Error" + e.getMessage());
         }
 
         return photos;
@@ -107,7 +112,98 @@ public class PhotosLoader extends AsyncTaskLoader<List<Photo>> {
     @Override
     public void deliverResult(List<Photo> data) {
         Log.d(TAG, "deliverResult: ");
+
+        if (isReset()) {
+            if (data != null) {
+                releaseResources(data);
+                return;
+            }
+        }
+
+        List<Photo> oldPhotos = mPhotos;
         mPhotos = data;
-        super.deliverResult(data);
+
+        if (isStarted()) {
+            super.deliverResult(data);
+        }
+
+        if (oldPhotos != null && oldPhotos != data) {
+            releaseResources(oldPhotos);
+        }
+    }
+
+    /**
+     * Subclasses must implement this to take care of loading their data,
+     * as per {@link #startLoading()}.  This is not called by clients directly,
+     * but as a result of a call to {@link #startLoading()}.
+     */
+    @Override
+    protected void onStartLoading() {
+        Log.d(TAG, "onStartLoading: ");
+
+//        super.onStartLoading();
+        if (mPhotos != null) {
+            deliverResult(mPhotos);
+        }
+
+        // Skip observer
+
+        if (takeContentChanged() || mPhotos == null) {
+            forceLoad();
+        }
+    }
+
+    /**
+     * Subclasses must implement this to take care of stopping their loader,
+     * as per {@link #stopLoading()}.  This is not called by clients directly,
+     * but as a result of a call to {@link #stopLoading()}.
+     * This will always be called from the process's main thread.
+     */
+    @Override
+    protected void onStopLoading() {
+        Log.d(TAG, "onStopLoading: ");
+
+//        super.onStopLoading();
+        cancelLoad();
+    }
+
+    /**
+     * Subclasses must implement this to take care of resetting their loader,
+     * as per {@link #reset()}.  This is not called by clients directly,
+     * but as a result of a call to {@link #reset()}.
+     * This will always be called from the process's main thread.
+     */
+    @Override
+    protected void onReset() {
+        Log.d(TAG, "onReset: ");
+
+//        super.onReset();
+        onStopLoading();
+
+        if (mPhotos != null) {
+            releaseResources(mPhotos);
+            mPhotos = null;
+        }
+
+        // Skip observer
+    }
+
+    /**
+     * Called if the task was canceled before it was completed.  Gives the class a chance
+     * to clean up post-cancellation and to properly dispose of the result.
+     *
+     * @param data The value that was returned by {@link #loadInBackground}, or null
+     *             if the task threw {@link OperationCanceledException}.
+     */
+    @Override
+    public void onCanceled(List<Photo> data) {
+        Log.d(TAG, "onCanceled: ");
+
+        super.onCanceled(data);
+        releaseResources(data);
+    }
+
+    private void releaseResources(List<Photo> data) {
+        // Nothing to do for List
     }
 }
