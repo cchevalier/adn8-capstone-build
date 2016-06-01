@@ -35,4 +35,12 @@
     <!-- Widget -->
     <string name="title_widget">PhotoSplash Favorites</string>
 
+    <!-- Additional Content Description -->
+    <string name="desc_photo_small">View photo</string>
+    <string name="desc_photo_view">Zoomable photo</string>
+    <string name="desc_fab_info">Get photo information</string>
+    <string name="desc_fab_favorite_add">Add photo to favorites</string>
+    <string name="desc_fab_favorite_remove">Add photo from favorites</string>
+
+
 </resources>

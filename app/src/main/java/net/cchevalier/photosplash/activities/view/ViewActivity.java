@@ -209,8 +209,10 @@ public class ViewActivity extends AppCompatActivity {
     private void updateFavoriteFAB(Boolean favoriteStatus) {
         if (favoriteStatus) {
             fabFavorite.setImageResource(R.drawable.heart_full);
+            fabFavorite.setContentDescription(getResources().getString(R.string.desc_fab_favorite_remove));
         } else {
             fabFavorite.setImageResource(R.drawable.heart);
+            fabFavorite.setContentDescription(getResources().getString(R.string.desc_fab_favorite_add));
         }
     }
 

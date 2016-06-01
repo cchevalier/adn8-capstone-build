@@ -33,6 +33,7 @@
 
         <uk.co.senab.photoview.PhotoView
             android:id="@+id/iv_photo"
+            android:contentDescription="@string/desc_photo_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
@@ -62,6 +63,7 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_info"
         android:src="@android:drawable/ic_menu_info_details"
+        android:contentDescription="@string/desc_fab_info"
         app:fabSize="mini"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,6 +74,7 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_favorite"
         android:src="@drawable/heart"
+        android:contentDescription="@string/desc_fab_favorite_add"
         app:fabSize="normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
