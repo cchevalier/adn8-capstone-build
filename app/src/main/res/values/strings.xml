@@ -9,6 +9,9 @@
 
     <string name="title_activity_view">View Photo</string>
 
+    <!-- Widget -->
+    <string name="title_widget">PhotoSplash Favorites</string>
+
     <!-- Photosplash categories -->
     <string name="category">Category</string>
 
