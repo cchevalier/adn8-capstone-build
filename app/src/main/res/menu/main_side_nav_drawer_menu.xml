@@ -31,14 +31,5 @@
             android:title="@string/category_technology" />
     </group>
 
-<!--
-    <item android:title="@string/category">
-        <menu>
-            <item
-                android:id="@+id/nav_settings"
-                android:title="@string/action_settings" />
-        </menu>
-    </item>
--->
 
 </menu>

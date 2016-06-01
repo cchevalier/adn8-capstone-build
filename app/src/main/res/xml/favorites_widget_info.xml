@@ -3,7 +3,7 @@
     android:minWidth="110dp"
     android:minHeight="110dp"
     android:updatePeriodMillis="1800000"
-    android:previewImage="@drawable/heart_full"
+    android:previewImage="@drawable/widget_preview"
     android:initialLayout="@layout/favorites_widget"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen">

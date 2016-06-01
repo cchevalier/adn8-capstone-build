@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    card_view:cardBackgroundColor="#fff176"
+    card_view:cardBackgroundColor="@color/colorBackgroundLight"
     card_view:cardCornerRadius="0dp"
     >
 
@@ -16,14 +16,14 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:padding="0dp"
-        android:background="#ffffff"
+        android:background="@color/colorBackgroundLight"
         >
 
         <net.cchevalier.photosplash.ui.custom.DynamicHeightImageView
             android:id="@+id/iv_favorite_photo"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:background="#ffffff"
+            android:background="@color/colorBackgroundLight"
             />
 
         <TextView
@@ -37,7 +37,7 @@
             android:paddingLeft="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#ffffff"
+            android:background="@color/colorBackgroundLight"
             />
 
         <ImageView
@@ -54,47 +54,3 @@
 
 
 </android.support.v7.widget.CardView>
-
-<!-- Old version used in ListView
-
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="300dp"
-    android:layout_height="wrap_content"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentRight="true"
-    android:background="#ffffff">
-
-    <net.cchevalier.photosplash.ui.custom.DynamicHeightImageView
-        android:id="@+id/iv_favorite_photo"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="#eeeeee"
-        android:layout_centerHorizontal="true"
-        />
-
-    <TextView
-        android:id="@+id/tv_fav_photo_id"
-        tools:text="PHOTO_ID"
-        android:layout_below="@+id/iv_favorite_photo"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:textSize="16sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#ffffff"
-        />
-
-    <ImageView
-        android:src="@drawable/heart"
-        android:layout_below="@+id/iv_favorite_photo"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        />
-
-</RelativeLayout>
--->
