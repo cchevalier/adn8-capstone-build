@@ -10,6 +10,18 @@
     tools:context=".activities.main.photos.PhotosByCategoryFragment"
     >
 
+    <TextView
+        android:id="@+id/tv_status"
+        android:text="@string/status_photos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center_vertical|center_horizontal"
+        android:textStyle="bold|italic"
+        android:visibility="gone"
+        />
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/photos_recycler_view"
         android:layout_width="match_parent"

@@ -10,13 +10,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.Picasso;
 
 import net.cchevalier.photosplash.PhotosplashApplication;
@@ -34,8 +37,8 @@ public class MainActivity extends AppCompatActivity
     private static final String CATEGORY_TITLE = "Category_Title";
     private static final String CATEGORY_ID = "Category_Id";
 
-    public String mCategoryTitle = "Favorites";
-    public int mCategoryId = -1;
+    public String mCategoryTitle;
+    public int mCategoryId;
 
 
     @Override
@@ -61,13 +64,16 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Track Picasso perfs
+        // Enable Picasso tracking perfomance
         Picasso.with(getBaseContext())
                 .setIndicatorsEnabled(true);
 
         if (savedInstanceState != null) {
-            mCategoryTitle = savedInstanceState.getString(CATEGORY_TITLE, "WTF");
+            mCategoryTitle = savedInstanceState.getString(CATEGORY_TITLE, getResources().getString(R.string.category_undefined));
             mCategoryId = savedInstanceState.getInt(CATEGORY_ID, 99);
+        } else {
+            mCategoryTitle = getResources().getString(R.string.category_new);
+            mCategoryId = 0;
         }
         addSelectedFragment();
         sendScreenCategoryName();
@@ -85,7 +91,7 @@ public class MainActivity extends AppCompatActivity
     protected void onSaveInstanceState(Bundle outState) {
         Log.d(TAG, "onSaveInstanceState: ");
         outState.putString(CATEGORY_TITLE, mCategoryTitle);
-        outState.putInt(CATEGORY_ID,mCategoryId);
+        outState.putInt(CATEGORY_ID, mCategoryId);
         super.onSaveInstanceState(outState);
     }
 
@@ -138,8 +144,13 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
+            String about = getResources().getString(R.string.about);
+            Toast toast = Toast.makeText(this, about, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+            toast.show();
             return true;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -181,7 +192,7 @@ public class MainActivity extends AppCompatActivity
 //            mCategoryTitle = "Technology";
             mCategoryId = 7;
         } else {
-//            mCategoryTitle = "Undefined";
+            mCategoryTitle = getResources().getString(R.string.category_undefined);
             mCategoryId = 99;
         }
 
@@ -266,7 +277,6 @@ public class MainActivity extends AppCompatActivity
 //        Log.d(TAG, "onDestroy: ");
 //        super.onDestroy();
 //    }
-
 
 
 }

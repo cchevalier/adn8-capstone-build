@@ -17,6 +17,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
+ * PhotosLoader:
+ *
  * Created by cch on 21/05/2016.
  */
 public class PhotosLoader extends AsyncTaskLoader<List<Photo>> {

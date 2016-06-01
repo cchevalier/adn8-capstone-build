@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import net.cchevalier.photosplash.R;
 import net.cchevalier.photosplash.models.Photo;
@@ -43,6 +44,8 @@ public class PhotosByCategoryFragment extends Fragment
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private PhotoAdapter mPhotoAdapter;
+
+    private TextView mStatusInfo;
 
     // Required empty public constructor
     public PhotosByCategoryFragment() {
@@ -104,6 +107,8 @@ public class PhotosByCategoryFragment extends Fragment
             mCategoryId = 99;
         }
 
+        mStatusInfo = (TextView) rootView.findViewById(R.id.tv_status);
+
         return rootView;
     }
 
@@ -147,19 +152,27 @@ public class PhotosByCategoryFragment extends Fragment
 
     @Override
     public void onLoadFinished(Loader<List<Photo>> loader, List<Photo> data) {
-        Log.d(TAG, "onLoadFinished: " + data.size());
 
-        mPhotos.clear();
-        mPhotoAdapter.notifyDataSetChanged();
+        if (data != null && data.size() != 0) {
+            Log.d(TAG, "onLoadFinished: " + data.size());
 
-        int count = data.size();
-        for (int i = 0; i < count; i++) {
-            Photo current = data.get(i);
-            mPhotos.add(i, current);
-            mPhotoAdapter.notifyItemChanged(i);
+            mStatusInfo.setVisibility(View.GONE);
+
+            mPhotos.clear();
+            mPhotoAdapter.notifyDataSetChanged();
+
+            int count = data.size();
+            for (int i = 0; i < count; i++) {
+                Photo current = data.get(i);
+                mPhotos.add(i, current);
+                mPhotoAdapter.notifyItemChanged(i);
+            }
+            mPhotoAdapter.notifyDataSetChanged();
+            mRecyclerView.scrollToPosition(0);
+        } else {
+            mStatusInfo.setVisibility(View.VISIBLE);
         }
-        mPhotoAdapter.notifyDataSetChanged();
-        mRecyclerView.scrollToPosition(0);
+
     }
 
     @Override

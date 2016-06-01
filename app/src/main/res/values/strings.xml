@@ -5,8 +5,12 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!-- About menu / Toast -->
     <string name="action_about">About</string>
     <string name="about">PhotoSplash\nAndroid Developer nanodegree\nby Udacity\n(c) CChevalier, 2016</string>
+
+    <!-- Connection Status-->
+    <string name="status_photos">No photos.\n Please check your network connection.</string>
 
     <!-- View Activity -->
     <string name="title_activity_view">View Photo</string>
@@ -23,6 +27,7 @@
     <string name="category_objects">Objects</string>
     <string name="category_people">People</string>
     <string name="category_technology">Technology</string>
+    <string name="category_undefined">Undefined category</string>
 
     <!-- AdMob -->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
