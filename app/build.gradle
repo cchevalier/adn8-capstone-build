@@ -5,6 +5,16 @@ android {
     Properties props = new Properties()
     props.load(new FileInputStream(file(project.rootProject.file("local.properties"))))
 
+    signingConfigs {
+        config {
+            keyAlias 'photosplash'
+            keyPassword 'Photosplash-pwd'
+            storeFile file("$rootDir/p8-keystore.jks")
+            storePassword 'Keystore-pwd'
+        }
+    }
+
+
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
@@ -23,26 +33,24 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
+
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
     compile 'com.android.support:cardview-v7:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
-
     compile 'com.squareup.retrofit2:retrofit:2.0.1'
     compile 'com.squareup.retrofit2:converter-gson:2.0.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
-
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
-
     // Google Play Services: Analytics and Ads
     compile 'com.google.android.gms:play-services-analytics:9.0.0'
     compile 'com.google.android.gms:play-services-ads:9.0.0'
