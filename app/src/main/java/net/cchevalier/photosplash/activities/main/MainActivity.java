@@ -45,18 +45,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-/*
-        // Make sure that Analytics tracking has started
-        ((PhotosplashApplication) getApplication()).startTracking();
-*/
-
-        // [START shared_tracker]
         // Obtain the shared Tracker instance.
         PhotosplashApplication application = (PhotosplashApplication) getApplication();
         mTracker = application.getDefaultTracker();
-        // [END shared_tracker]
-
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -71,14 +62,10 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // Track Picasso perfs
-        Picasso
-                .with(getBaseContext())
+        Picasso.with(getBaseContext())
                 .setIndicatorsEnabled(true);
 
         if (savedInstanceState != null) {
-//            String savedCategoryTitle = savedInstanceState.getString(CATEGORY_TITLE, "Fav");
-//            int savedCategoryId = savedInstanceState.getInt(CATEGORY_ID, -1);
-//            Log.d(TAG, "onCreate: saved: " + savedCategoryId + " " + savedCategoryTitle);
             mCategoryTitle = savedInstanceState.getString(CATEGORY_TITLE, "WTF");
             mCategoryId = savedInstanceState.getInt(CATEGORY_ID, 99);
         }
@@ -91,54 +78,8 @@ public class MainActivity extends AppCompatActivity
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
         mAdView.loadAd(adRequest);
-
     }
 
-    /**
-     * Dispatch onStart() to all fragments.  Ensure any created loaders are
-     * now started.
-     */
-    @Override
-    protected void onStart() {
-        Log.d(TAG, "onStart: ");
-        super.onStart();
-    }
-
-    /**
-     * Dispatch onResume() to fragments.  Note that for better inter-operation
-     * with older versions of the platform, at the point of this call the
-     * fragments attached to the activity are <em>not</em> resumed.  This means
-     * that in some cases the previous state may still be saved, not allowing
-     * fragment transactions that modify the state.  To correctly interact
-     * with fragments in their proper state, you should instead override
-     * {@link #onResumeFragments()}.
-     */
-    @Override
-    protected void onResume() {
-        Log.d(TAG, "onResume: ");
-        super.onResume();
-    }
-
-    /**
-     * This is the fragment-orientated version of {@link #onResume()} that you
-     * can override to perform operations in the Activity at the same point
-     * where its fragments are resumed.  Be sure to always call through to
-     * the super-class.
-     */
-    @Override
-    protected void onResumeFragments() {
-        Log.d(TAG, "onResumeFragments: ");
-        super.onResumeFragments();
-    }
-
-    /**
-     * Dispatch onPause() to fragments.
-     */
-    @Override
-    protected void onPause() {
-        Log.d(TAG, "onPause: ");
-        super.onPause();
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -146,44 +87,6 @@ public class MainActivity extends AppCompatActivity
         outState.putString(CATEGORY_TITLE, mCategoryTitle);
         outState.putInt(CATEGORY_ID,mCategoryId);
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onStop() {
-        Log.d(TAG, "onStop: ");
-        super.onStop();
-    }
-
-    /**
-     * Called after {@link #onStop} when the current activity is being
-     * re-displayed to the user (the user has navigated back to it).  It will
-     * be followed by {@link #onStart} and then {@link #onResume}.
-     * <p/>
-     * <p>For activities that are using raw {@link Cursor} objects (instead of
-     * creating them through
-     * {@link #managedQuery(Uri, String[], String, String[], String)},
-     * this is usually the place
-     * where the cursor should be requeried (because you had deactivated it in
-     * {@link #onStop}.
-     * <p/>
-     * <p><em>Derived classes must call through to the super class's
-     * implementation of this method.  If they do not, an exception will be
-     * thrown.</em></p>
-     *
-     * @see #onStop
-     * @see #onStart
-     * @see #onResume
-     */
-    @Override
-    protected void onRestart() {
-        Log.d(TAG, "onRestart: ");
-        super.onRestart();
-    }
-
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG, "onDestroy: ");
-        super.onDestroy();
     }
 
     private void addSelectedFragment() {
@@ -242,46 +145,45 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        Log.d(TAG, "onNavigationItemSelected: " + item.getTitle());
 
         // Handle navigation view item clicks here.
+        mCategoryTitle = (String) item.getTitle();
         int id = item.getItemId();
 
-
         if (id == R.id.nav_category_favorites) {
-            mCategoryTitle = "Favorites";
+//            mCategoryTitle = "Favorites";
             mCategoryId = -1;
         } else if (id == R.id.nav_category_new) {
-            mCategoryTitle = "New";
+//            mCategoryTitle = "New";
             mCategoryId = 0;
         } else if (id == R.id.nav_category_featured) {
-            mCategoryTitle = "Featured";
+//            mCategoryTitle = "Featured";
             mCategoryId = 1;
         } else if (id == R.id.nav_category_buildings) {
-            mCategoryTitle = "Buildings";
+//            mCategoryTitle = "Buildings";
             mCategoryId = 2;
         } else if (id == R.id.nav_category_food) {
-            mCategoryTitle = "Food";
+//            mCategoryTitle = "Food";
             mCategoryId = 3;
         } else if (id == R.id.nav_category_nature) {
-            mCategoryTitle = "Nature";
+//            mCategoryTitle = "Nature";
             mCategoryId = 4;
         } else if (id == R.id.nav_category_objects) {
-            mCategoryTitle = "Objects";
+//            mCategoryTitle = "Objects";
             mCategoryId = 8;
         } else if (id == R.id.nav_category_people) {
-            mCategoryTitle = "People";
+//            mCategoryTitle = "People";
             mCategoryId = 6;
         } else if (id == R.id.nav_category_technology) {
-            mCategoryTitle = "Technology";
+//            mCategoryTitle = "Technology";
             mCategoryId = 7;
         } else {
-            mCategoryTitle = "Undefined";
+//            mCategoryTitle = "Undefined";
             mCategoryId = 99;
         }
-        Log.d(TAG, "onNavigationItemSelected: " + mCategoryTitle);
 
         getSupportActionBar().setTitle(mCategoryTitle);
         addSelectedFragment();
@@ -294,13 +196,77 @@ public class MainActivity extends AppCompatActivity
 
 
     private void sendScreenCategoryName() {
+        Log.d(TAG, "sendScreenCategoryName: " + mCategoryTitle);
 
-        // [START screen_view_hit]
-        Log.i(TAG, "Setting screen name: " + mCategoryTitle);
         mTracker.setScreenName("Category " + mCategoryTitle);
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        // [END screen_view_hit]
-
     }
+
+
+//    /**
+//     * Dispatch onStart() to all fragments.  Ensure any created loaders are
+//     * now started.
+//     */
+//    @Override
+//    protected void onStart() {
+//        Log.d(TAG, "onStart: ");
+//        super.onStart();
+//    }
+//
+//    /**
+//     * Dispatch onResume() to fragments.  Note that for better inter-operation
+//     * with older versions of the platform, at the point of this call the
+//     * fragments attached to the activity are <em>not</em> resumed.  This means
+//     * that in some cases the previous state may still be saved, not allowing
+//     * fragment transactions that modify the state.  To correctly interact
+//     * with fragments in their proper state, you should instead override
+//     * {@link #onResumeFragments()}.
+//     */
+//    @Override
+//    protected void onResume() {
+//        Log.d(TAG, "onResume: ");
+//        super.onResume();
+//    }
+//
+//    /**
+//     * This is the fragment-orientated version of {@link #onResume()} that you
+//     * can override to perform operations in the Activity at the same point
+//     * where its fragments are resumed.  Be sure to always call through to
+//     * the super-class.
+//     */
+//    @Override
+//    protected void onResumeFragments() {
+//        Log.d(TAG, "onResumeFragments: ");
+//        super.onResumeFragments();
+//    }
+//
+//    /**
+//     * Dispatch onPause() to fragments.
+//     */
+//    @Override
+//    protected void onPause() {
+//        Log.d(TAG, "onPause: ");
+//        super.onPause();
+//    }
+
+//    @Override
+//    protected void onStop() {
+//        Log.d(TAG, "onStop: ");
+//        super.onStop();
+//    }
+//
+//    @Override
+//    protected void onRestart() {
+//        Log.d(TAG, "onRestart: ");
+//        super.onRestart();
+//    }
+//
+//    @Override
+//    protected void onDestroy() {
+//        Log.d(TAG, "onDestroy: ");
+//        super.onDestroy();
+//    }
+
+
 
 }

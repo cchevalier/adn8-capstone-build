@@ -23,7 +23,7 @@ import net.cchevalier.photosplash.data.PhotosplashContract;
  */
 public class FavoritePhotosFragment extends Fragment {
 
-    public final String TAG = "PhotoSplash-FFrag";
+    public static final String TAG = "PhotoSplash-FFrag";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -38,9 +38,12 @@ public class FavoritePhotosFragment extends Fragment {
 
 
     public FavoritePhotosFragment() {
+        Log.d(TAG, "FavoritePhotosFragment: ");
     }
 
     public static FavoritePhotosFragment newInstance(String categoryTitle) {
+        Log.d(TAG, "FavoritePhotosFragment - newInstance with : " + categoryTitle);
+
         FavoritePhotosFragment fragment = new FavoritePhotosFragment();
         Bundle args = new Bundle();
         args.putString(CATEGORY_TITLE, categoryTitle);
@@ -50,6 +53,8 @@ public class FavoritePhotosFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: ");
+
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mCategoryTitle = getArguments().getString(CATEGORY_TITLE);
@@ -59,6 +64,8 @@ public class FavoritePhotosFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: ");
+
         View rootView = inflater.inflate(R.layout.main_favorite_photos_fragment, container, false);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_favorites);
@@ -78,8 +85,7 @@ public class FavoritePhotosFragment extends Fragment {
         Log.d(TAG, "onActivityCreated: ");
 
         // Initialize the loader with a special ID and the defined callbacks from above
-        getActivity().getSupportLoaderManager().restartLoader(
-                FAVORITES_LOADER_ID,
+        getActivity().getSupportLoaderManager().initLoader(FAVORITES_LOADER_ID,
                 new Bundle(),
                 favoritesLoader);
         super.onActivityCreated(savedInstanceState);
@@ -92,6 +98,7 @@ public class FavoritePhotosFragment extends Fragment {
 
                 @Override
                 public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                    Log.d(TAG, "onCreateLoader: ");
 
                     // Define the columns to retrieve
                     String[] projectionFields = new String[] {
@@ -125,6 +132,8 @@ public class FavoritePhotosFragment extends Fragment {
                 // a call to the onLoadFinished() method takes place.
                 @Override
                 public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+                    Log.d(TAG, "onLoadFinished with: " + cursor.getCount() + " favorites.");
+
                     mFavoriteAdapter.swapCursor(cursor);
                 }
 
@@ -133,6 +142,8 @@ public class FavoritePhotosFragment extends Fragment {
                 // in the provider changes and the Cursor becomes stale.
                 @Override
                 public void onLoaderReset(Loader<Cursor> loader) {
+                    Log.d(TAG, "onLoaderReset: ");
+
                     // Clear the Cursor we were using with another call to the swapCursor()
                     mFavoriteAdapter.swapCursor(null);
                 }

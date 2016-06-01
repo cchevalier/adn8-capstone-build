@@ -25,7 +25,7 @@ import net.cchevalier.photosplash.ui.custom.DynamicHeightImageView;
  */
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
 
-    public final String TAG = "PhotoSplash-FA";
+    public static final String TAG = "PhotoSplash-FA";
 
     Cursor mCursor;
 
