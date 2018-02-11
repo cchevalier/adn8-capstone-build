@@ -21,13 +21,13 @@ android {
     }
 
 
-    compileSdkVersion 23
+    compileSdkVersion 25
     buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "net.cchevalier.photosplash"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
     }
@@ -49,11 +49,11 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
 
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:recyclerview-v7:23.4.0'
-    compile 'com.android.support:cardview-v7:23.4.0'
-    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:cardview-v7:25.3.1'
+    compile 'com.android.support:support-v4:25.3.1'
 
     compile 'com.squareup.retrofit2:retrofit:2.0.1'
     compile 'com.squareup.retrofit2:converter-gson:2.0.1'
@@ -62,8 +62,8 @@ dependencies {
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
 
     // Google Play Services: Analytics and Ads
-    compile 'com.google.android.gms:play-services-analytics:9.0.0'
-    compile 'com.google.android.gms:play-services-ads:9.0.0'
+    compile 'com.google.android.gms:play-services-analytics:11.0.4'
+    compile 'com.google.android.gms:play-services-ads:11.0.4'
 }
 
 // Add the plugin to the bottom of your app-level build.gradle:
