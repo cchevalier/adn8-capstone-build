@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity
 
         // Enable Picasso tracking perfomance
         Picasso.with(getBaseContext())
-                .setIndicatorsEnabled(true);
+                .setIndicatorsEnabled(false);
 
         if (savedInstanceState != null) {
             mCategoryTitle = savedInstanceState.getString(CATEGORY_TITLE, getResources().getString(R.string.category_undefined));

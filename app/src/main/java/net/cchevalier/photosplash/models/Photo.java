@@ -68,7 +68,8 @@ public class Photo implements Parcelable {
     }
 
     public String toString() {
-        String res = "id: " + this.id;
+        String res = "Basic Info:";
+        res = res + "\n id: " + this.id;
         res = res + "\n w: " + this.width;
         res = res + "\n h: " + this.height;
         res = res + "\n c: " + this.color;
