@@ -111,27 +111,34 @@ public class ViewActivity extends AppCompatActivity {
 
         // Info
         //
-        // Sample Info text
-        TextView photoInfo = (TextView) findViewById(R.id.tv_photo_info);
-        photoInfo.setText(currentPhoto.toString());
-        //
         // Bottom Sheet
         View bottomSheet = findViewById( R.id.bottom_sheet );
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        // Fix 2018.02.12, see https://stackoverflow.com/questions/39030742/bottomsheetbehavior-is-not-work-when-design-library-update-to-24-2-0
+        mBottomSheetBehavior.setPeekHeight(0);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        Log.d(TAG, "before: " + mBottomSheetBehavior.getState());
+
         //
         // Info FAB
         FloatingActionButton fabInfo = (FloatingActionButton) findViewById(R.id.fab_info);
         fabInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d(TAG, "onClick: " + mBottomSheetBehavior.getState());
                 if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 } else {
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
+                Log.d(TAG, "after : " + mBottomSheetBehavior.getState());
             }
         });
+        //
+        // Sample Info text
+        TextView photoInfo = (TextView) findViewById(R.id.tv_photo_info);
+        photoInfo.setText(currentPhoto.toString());
+
     }
 
     @Override

@@ -26,7 +26,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackgroundDark"
+        android:background="@color/colorBackgroundLight"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".activities.view.ViewActivity"
         tools:showIn="@layout/view_activity">
